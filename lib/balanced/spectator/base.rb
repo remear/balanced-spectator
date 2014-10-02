@@ -13,6 +13,12 @@ module Balanced
                                     {"Content-Type" => "text/html"},
                                     ['Request must be application/json']]
       DEFAULT_RABBITMQ_QUEUE_NAME = 'balanced_event_incoming'
+      DEFAULT_RABBITMQ_HOST = 'localhost'
+      DEFAULT_RABBITMQ_PORT = 5672
+      DEFAULT_RABBITMQ_SSL = false
+      DEFAULT_RABBITMQ_VHOST = '/'
+      DEFAULT_RABBITMQ_USER = 'guest'
+      DEFAULT_RABBITMQ_PASS = 'guest'
 
       def initialize(options={})
         if options[:authorized_ips]
@@ -23,8 +29,27 @@ module Balanced
         @ignored_event_types = options[:authorized_ips] ? options[:authorized_ips] : []
         rabbitmq_queue_name = options[:rabbitmq_queue_name] ?
                                 options[:rabbitmq_queue_name] : DEFAULT_RABBITMQ_QUEUE_NAME
+        rabbitmq_host = options[:rabbitmq_host] ?
+                          options[:rabbitmq_host] : DEFAULT_RABBITMQ_HOST
+        rabbitmq_port = options[:rabbitmq_port] ?
+                          options[:rabbitmq_port] : DEFAULT_RABBITMQ_PORT
+        rabbitmq_ssl = options[:rabbitmq_ssl] ?
+                          options[:rabbitmq_ssl] : DEFAULT_RABBITMQ_SSL
+        rabbitmq_vhost = options[:rabbitmq_vhost] ?
+                          options[:rabbitmq_vhost] : DEFAULT_RABBITMQ_VHOST
+        rabbitmq_user = options[:rabbitmq_user] ?
+                          options[:rabbitmq_user] : DEFAULT_RABBITMQ_USER
+        rabbitmq_pass = options[:rabbitmq_pass] ?
+                          options[:rabbitmq_pass] : DEFAULT_RABBITMQ_PASS
 
-        rabbit_conn = Bunny.new
+        rabbit_conn = Bunny.new(
+            :host => rabbitmq_host,
+            :port => rabbitmq_port,
+            :ssl => rabbitmq_ssl,
+            :vhost => rabbitmq_vhost,
+            :user => rabbitmq_user,
+            :pass => rabbitmq_pass
+            )
         rabbit_conn.start
         ch = rabbit_conn.create_channel
         @rabbit_queue = ch.queue(rabbitmq_queue_name, :durable => true)

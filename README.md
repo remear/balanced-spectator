@@ -29,13 +29,31 @@ Available options:
 
 ```rabbitmq_queue_name``` - Name of the RabbitMQ queue to use. Defaults to ```balanced_event_incoming```. 
 
+```rabbitmq_host``` - Name of the RabbitMQ server. Defaults to ```localhost```. 
+
+```rabbitmq_port``` - Port on which to connect to the RabbitMQ server. Defaults to ```5672```. 
+
+```rabbitmq_ssl``` - Whether or not to use SSL when connecting to the RabbitMQ server. Defaults to ```false```. 
+
+```rabbitmq_vhost``` - VHost to use when connecting. Defaults to ```/```. 
+
+```rabbitmq_user``` - Username for connecting to RabbitMQ server. Defaults to ```guest```. 
+
+```rabbitmq_pass``` - Password for connecting to RabbitMQ server. Defaults to ```guest```. 
+
 Example usage:
 
 ```ruby
 run Balanced::Spectator::Base.new(
-  authorized_ips: ['192.168.0.10', '192.168.0.11'],
-  ignored_event_types: ['debit.succeeded', 'debit.failed', 'credit.succeeded'],
-  rabbitmq_queue_name: 'balanced_event_incoming'
+  :authorized_ips => ['192.168.0.10', '192.168.0.11'],
+  :ignored_event_types => ['debit.succeeded', 'debit.failed', 'credit.succeeded'],
+  :rabbitmq_queue_name => 'balanced_event_incoming',
+  :rabbitmq_host => 'localhost',
+  :rabbitmq_port => 5672,
+  :rabbitmq_ssl => false,
+  :rabbitmq_vhost => '/',
+  :rabbitmq_user => 'guest',
+  :rabbitmq_pass => 'guest'
 )
 ```
 
